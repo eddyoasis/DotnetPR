@@ -781,10 +781,14 @@
                 </div>
                 <div class="approval-hierarchy">
                     <strong>Approval Hierarchy for this PR:</strong>
-                    <ol>
+                    <ol>   
                         <li>
-                            <strong>Submitter:</strong> @Model.SubmittedBy
-                            <span class="approval-check"> Submitted</span>
+                            <strong>Submitter:</strong> @Model.SubmittedByEmail
+                            @* @if (!string.IsNullOrEmpty(Model.SubmittedByEmail))
+                            {
+                                <strong>(@Model.SubmittedByEmail)</strong>
+                            } *@
+                            <span class="approval-check">✓ Submitted</span>
                             @if (Model.SubmittedDate.HasValue)
                             {
                                 <small>(@Model.SubmittedDate.Value.ToString("MMM dd, HH:mm"))</small>
@@ -836,7 +840,19 @@
                                         @foreach (var step in steps.OrderBy(s => s.Department))
                                         {
                                             <li style="list-style-type: disc; margin: 5px 0;">
-                                                <strong>@step.ApproverRole:</strong> @step.ApproverName
+                                                <strong>@step.ApproverRole:</strong>
+                                                @if (!string.IsNullOrEmpty(step.ApproverEmail))
+                                                {
+                                                   @step.ApproverEmail
+                                                   @*  @if (!string.IsNullOrEmpty(step.ApproverName))
+                                                    {
+                                                        <span style="color: #666; font-size: 12px;">(@step.ApproverName)</span>
+                                                    } *@
+                                                }
+                                                else
+                                                {
+                                                    @step.ApproverName
+                                                }
                                                 @if (step.Status == ApprovalStatus.Approved)
                                                 {
                                                     <span class="approval-check"> Approved</span>
@@ -869,7 +885,19 @@
                                 //  FIX: Check if THIS step order matches the final step order
                                 var isFinalStep = (stepOrder == finalStepOrder);
                                 <li>
-                                    <strong>@step.ApproverRole:</strong> @step.ApproverName
+                                    <strong>@step.ApproverRole:</strong>
+                                    @if (!string.IsNullOrEmpty(step.ApproverEmail))
+                                    {
+                                        @step.ApproverEmail
+                                        @* @if (!string.IsNullOrEmpty(step.ApproverName))
+                                        {
+                                            <span style="color: #888; font-size: 12px;">(@step.ApproverName)</span>
+                                        } *@
+                                    }
+                                    else
+                                    {
+                                        @step.ApproverName
+                                    }
                                     @if (step.Status == ApprovalStatus.Approved)
                                     {
                                         <span class="approval-check"> Approved</span>

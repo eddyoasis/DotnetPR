@@ -76,6 +76,8 @@ namespace PurchaseRequisitionSystem.Models
         public DateTime? SubmittedDate { get; set; }
         [Display(Name = "Submitted By")]
         public string? SubmittedBy { get; set; } = string.Empty;
+
+        public string? SubmittedByEmail { get; set; }
         [Display(Name = "Current Approver")]
         public string? CurrentApprover { get; set; }
         [Display(Name = "Approval Priority")]

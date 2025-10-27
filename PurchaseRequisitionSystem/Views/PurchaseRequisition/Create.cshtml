@@ -477,8 +477,14 @@
     }
 
     .step-approver {
-        font-size: 12px;
+        font-size: 13px;
         color: #666;
+        word-break: break-word; /* Allow long emails to wrap */
+        font-weight: 500;
+    }
+
+    .approval-info p {
+        word-break: break-word; /* Prevent email overflow */
     }
 
     .cost-center-note {
@@ -1769,7 +1775,7 @@
             steps.push({
                 number: stepNumber++,
                 role: 'IT HOD',
-                name: 'IT HOD',
+                 name: 'Chaiyee',
                 description: 'IT Department',
                 reason: 'IT-related purchase requires IT HOD approval'
             });
@@ -1778,7 +1784,7 @@
         steps.push({
             number: stepNumber++,
             role: 'CS HOD',
-            name: 'CS HOD',
+             name: 'Scott',
             description: 'CS Department',
             reason: 'Required for all purchase requisitions'
         });
@@ -1832,7 +1838,7 @@
         steps.push({
             number: stepNumber++,
             role: isFinalCFO ? 'CFO (Final Approval)' : 'CFO', //  FIX: Mark as final
-            name: 'Scott',
+            name: 'Julia',
             description: 'Finance',
             reason: isFixedAsset
                 ? `Fixed Asset ≥ SGD ${cfoThreshold.toLocaleString()} requires CFO approval`

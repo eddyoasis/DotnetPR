@@ -123,12 +123,12 @@
                         <p><strong>Current Step:</strong> @Model.CurrentApprovalStep of @Model.TotalApprovalSteps</p>
                     </div>
                     <div class="col-md-6">
-                        <p><strong>Submitted By:</strong> @Model.SubmittedBy</p>
+                        <p><strong>Submitted By:</strong> @Model.SubmittedByEmail</p>
                         <p><strong>Submitted Date:</strong> @Model.SubmittedDate?.ToString("MMM dd, yyyy HH:mm")</p>
                         @{
                             var firstStepApprovers = Model.WorkflowSteps
                             .Where(s => s.StepOrder == 1)
-                            .Select(s => s.ApproverName)
+                            .Select(s => s.ApproverEmail)
                             .ToList();
                         }
                         @if (firstStepApprovers.Count > 1)
@@ -163,7 +163,22 @@
                                     <ul style="margin-top: 5px;">
                                         @foreach (var step in steps)
                                         {
-                                            <li>@step.ApproverRole - @step.ApproverName <span style="color: #666;">(@step.Department)</span></li>
+                                            <li>
+                                                <strong>@step.ApproverRole:</strong>
+                                                @if (!string.IsNullOrEmpty(step.ApproverEmail))
+                                                {
+                                                    <strong>@step.ApproverEmail</strong>
+                                                   @*  @if (!string.IsNullOrEmpty(step.ApproverName))
+                                                    {
+                                                        <span style="color: #666;">(@step.ApproverName)</span>
+                                                    } *@
+                                                }
+                                                else
+                                                {
+                                                    @step.ApproverName
+                                                }
+                                                <span style="color: #666;"> - @step.Department</span>
+                                            </li>
                                         }
                                     </ul>
                                 </li>
@@ -172,8 +187,20 @@
                             {
                                 var step = steps.First();
                                 <li>
-                                    <strong>@step.ApproverRole:</strong> @step.ApproverName
-                                    <span style="color: #666;">(@step.Department)</span>
+                                    <strong>@step.ApproverRole:</strong>
+                                    @if (!string.IsNullOrEmpty(step.ApproverEmail))
+                                    {
+                                        <strong style="color: #0066cc;">@step.ApproverEmail</strong>
+                                        @* @if (!string.IsNullOrEmpty(step.ApproverName))
+                                        {
+                                            <span style="color: #666;">(@step.ApproverName)</span>
+                                        } *@
+                                    }
+                                    else
+                                    {
+                                        @step.ApproverName
+                                    }
+                                    <span style="color: #666;"> - @step.Department</span>
                                 </li>
                             }
                         }

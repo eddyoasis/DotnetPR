@@ -252,6 +252,7 @@ namespace PurchaseRequisitionSystem.Controllers
                 purchaseRequisition.CreatedDate = DateTime.Now;
                 purchaseRequisition.CurrentStatus = WorkflowStatus.Draft;
                 purchaseRequisition.SubmittedBy = BaseService.Username;
+                purchaseRequisition.SubmittedByEmail = BaseService.Email;
                 purchaseRequisition.DistributionType = DistributionType.Amount;
 
                 // Get exchange rate
@@ -617,6 +618,7 @@ namespace PurchaseRequisitionSystem.Controllers
                 pr.CurrentStatus = WorkflowStatus.Submitted;
                 pr.SubmittedDate = DateTime.Now;
                 pr.SubmittedBy = BaseService.Username;
+                pr.SubmittedByEmail = BaseService.Email;
                 pr.IsDistributionValid = true;
 
                 await _context.SaveChangesAsync();
@@ -637,7 +639,7 @@ namespace PurchaseRequisitionSystem.Controllers
                         //    pr.PRReference,
                         //    pr);
 
-                        _logger.LogInformation($" Sent PR {pr.PRReference} to {firstStep.ApproverName}");
+                        _logger.LogInformation($" Sent PR {pr.PRReference} to {firstStep.ApproverEmail} ({firstStep.ApproverRole})");
                     }
                     catch (Exception ex)
                     {

@@ -74,18 +74,20 @@ namespace PurchaseRequisitionSystem.Services
             // EXTRACT UNIQUE COST CENTER APPROVERS
             // ====================================================================
             var uniqueApprovers = new HashSet<string>();
-            var costCenterApprovers = new List<(string Approver, string ApproverEmail, string CostCenterName, string ApproverRole)>();
+            var costCenterApprovers = new List<(string ApproverName, string ApproverEmail, string CostCenterName, string ApproverRole)>();
             _logger.LogInformation($" Processing {pr.CostCenters.Count} cost centers:");
             foreach (var cc in pr.CostCenters)
             {
                 _logger.LogInformation($"   - Cost Center: {cc.Name}, Approver: {cc.Approver}, Email: {cc.ApproverEmail}");
                 if (!string.IsNullOrEmpty(cc.Approver) && !string.IsNullOrEmpty(cc.ApproverEmail))
                 {
+                    var approverInfo = _configHelper.GetCostCenterApproverInfo(cc.Name);
                     var uniqueKey = $"{cc.ApproverEmail}|{cc.Name}";
                     if (uniqueApprovers.Add(uniqueKey))
                     {
                         costCenterApprovers.Add((
-                            cc.Approver,
+                            approverInfo.Name,
+                            //cc.Approver,
                             cc.ApproverEmail,
                             cc.Name,
                             cc.ApproverRole ?? "HOD"
@@ -113,15 +115,14 @@ namespace PurchaseRequisitionSystem.Services
                 {
                     StepOrder = stepOrder,
                     ApproverRole = approver.ApproverRole,
-                    //ApproverName = approver.Approver,
-                    ApproverName = BaseService.Username.ToLower(),
+                    ApproverName = approver.ApproverName,
                     ApproverEmail = approver.ApproverEmail,
                     Department = approver.CostCenterName,
                     Status = ApprovalStatus.Pending,
                     IsRequired = true,
                     IsParallel = true
                 });
-                _logger.LogInformation($"     {approver.ApproverRole} - {approver.Approver} ({approver.CostCenterName})");
+                _logger.LogInformation($"     {approver.ApproverRole} - {approver.ApproverName} ({approver.CostCenterName})");
             }
             stepOrder++;
             // ====================================================================
@@ -133,8 +134,7 @@ namespace PurchaseRequisitionSystem.Services
                 {
                     StepOrder = stepOrder++,
                     ApproverRole = "IT HOD",
-                    //ApproverName = _configHelper.GetApproverName("ITHOD"), //  From config
-                    ApproverName = BaseService.Username.ToLower(),
+                    ApproverName = _configHelper.GetApproverName("ITHOD"),
                     ApproverEmail = _configHelper.GetApproverEmail("ITHOD"), //  From config
                     Department = "IT Department",
                     Status = ApprovalStatus.Pending,
@@ -149,8 +149,7 @@ namespace PurchaseRequisitionSystem.Services
             {
                 StepOrder = stepOrder++,
                 ApproverRole = "CS HOD",
-                //ApproverName = _configHelper.GetApproverName("CSHOD"), //  From config
-                ApproverName = BaseService.Username.ToLower(),
+                ApproverName = _configHelper.GetApproverName("CSHOD"), //  From config
                 ApproverEmail = _configHelper.GetApproverEmail("CSHOD"), //  From config
                 Department = "CS Department",
                 Status = ApprovalStatus.Pending,
@@ -187,8 +186,7 @@ namespace PurchaseRequisitionSystem.Services
                 {
                     StepOrder = stepOrder++,
                     ApproverRole = "CFO (Final Approval)",
-                    //ApproverName = _configHelper.GetApproverName("CFO"), //  From config
-                    ApproverName = BaseService.Username.ToLower(),
+                    ApproverName = _configHelper.GetApproverName("CFO"), //  From config
                     ApproverEmail = _configHelper.GetApproverEmail("CFO"), //  From config
                     Department = "Finance",
                     Status = ApprovalStatus.Pending,
@@ -218,15 +216,14 @@ namespace PurchaseRequisitionSystem.Services
                     {
                         StepOrder = finalStepOrder,
                         ApproverRole = $"{approver.ApproverRole} (Final Approval)",
-                        //ApproverName = approver.Approver,
-                        ApproverName = BaseService.Username.ToLower(),
+                        ApproverName = approver.ApproverName,
                         ApproverEmail = approver.ApproverEmail,
                         Department = approver.CostCenterName,
                         Status = ApprovalStatus.Pending,
                         IsRequired = true,
                         IsParallel = true
                     });
-                    _logger.LogInformation($"     Final Approver: {approver.Approver} from {approver.CostCenterName}");
+                    _logger.LogInformation($"     Final Approver: {approver.ApproverName} from {approver.CostCenterName}");
                 }
                 stepOrder++;
             }
@@ -237,8 +234,7 @@ namespace PurchaseRequisitionSystem.Services
                 {
                     StepOrder = stepOrder++,
                     ApproverRole = "CFO",
-                    //ApproverName = _configHelper.GetApproverName("CFO"), //  From config
-                    ApproverName = BaseService.Username.ToLower(),
+                    ApproverName = _configHelper.GetApproverName("CFO"), //  From config
                     ApproverEmail = _configHelper.GetApproverEmail("CFO"), //  From config
                     Department = "Finance",
                     Status = ApprovalStatus.Pending,
@@ -254,8 +250,7 @@ namespace PurchaseRequisitionSystem.Services
                     {
                         StepOrder = stepOrder++,
                         ApproverRole = "CEO",
-                        //ApproverName = _configHelper.GetApproverName("CEO"), //  From config
-                        ApproverName = BaseService.Username.ToLower(),
+                        ApproverName = _configHelper.GetApproverName("CEO"), //  From config
                         ApproverEmail = _configHelper.GetApproverEmail("CEO"), //  From config
                         Department = "Executive",
                         Status = ApprovalStatus.Pending,
