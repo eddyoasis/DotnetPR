@@ -1,0 +1,16 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/PurchaseRequisitionSystem/bin/Debug/net8.0
+/PurchaseRequisitionSystem/obj
+/PurchaseRequisitionSystem/Properties/PublishProfiles
+/PurchaseRequisitionSystem/appsettings.json
+/PurchaseRequisitionSystem/wwwroot/generated-pdfs
+
+bin/
+obj/
+.vs/
+*.user
+*.suo
